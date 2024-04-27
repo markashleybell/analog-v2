@@ -1,0 +1,29 @@
+{
+    "name": "analog",
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build --emptyOutDir",
+        "preview": "vite preview --port 4173",
+        "lint": "eslint . --fix"
+    },
+    "dependencies": {
+        "monaco-editor-vue3": "^0.1.10",
+        "primevue": "^3.52.0",
+        "vue": "^3.2.38"
+    },
+    "devDependencies": {
+        "@rushstack/eslint-patch": "^1.1.4",
+        "@vitejs/plugin-vue": "^5.0.4",
+        "@vitejs/plugin-vue-jsx": "^3.1.0",
+        "@vue/eslint-config-prettier": "^9.0.0",
+        "autoprefixer": "^10.4.19",
+        "eslint": "^9.1.1",
+        "eslint-plugin-vue": "^9.3.0",
+        "postcss": "^8.4.38",
+        "prettier": "^3.2.5",
+        "tailwindcss": "^3.4.3",
+        "vite": "^5.2.10"
+    }
+}
