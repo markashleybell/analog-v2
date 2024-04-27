@@ -362,5 +362,4 @@ MigrationBackup/
 FodyWeavers.xsd
 
 # Project-specific
-tmp.db
-persistfiles.txt
+UserInterface/dist/

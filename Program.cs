@@ -13,19 +13,11 @@ class Program
             .CreateStaticFileServer(args, out string baseUrl)
             .RunAsync();
 
-        // Window title declared here for visibility
-        string windowTitle = "Photino.Vue Demo App";
-
-        // Creating a new PhotinoWindow instance with the fluent API
         var window = new PhotinoWindow()
-            .SetTitle(windowTitle)
-            // Resize to a percentage of the main monitor work area
-            //.Resize(50, 50, "%")
-            // Center window in the middle of the screen
+            .SetTitle("AnaLog 2.0")
             .Center()
-            // Users can resize windows by default.
-            // Let's make this one fixed instead.
             .SetResizable(true)
+            /*
             .RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
             {
                 contentType = "text/javascript";
@@ -36,11 +28,9 @@ class Program
                             }, 1000);
                         })();
                     "));
-            })
-            // Most event handlers can be registered after the
-            // PhotinoWindow was instantiated by calling a registration 
-            // method like the following RegisterWebMessageReceivedHandler.
-            // This could be added in the PhotinoWindowOptions if preferred.
+            })*/
+
+            /*
             .RegisterWebMessageReceivedHandler((object? sender, string message) =>
             {
                 ArgumentNullException.ThrowIfNull(sender);
@@ -55,6 +45,7 @@ class Program
                 // "window.external.receiveMessage(callback: Function)"
                 window.SendWebMessage(response);
             })
+            */
             .Load($"{baseUrl}/index.html"); // Can be used with relative path strings or "new URI()" instance to load a website.
 
         window.WaitForClose(); // Starts the application event loop
