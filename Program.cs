@@ -15,7 +15,11 @@ class Program
 
         var window = new PhotinoWindow()
             .SetTitle("AnaLog 2.0")
+            .SetUseOsDefaultSize(false)
+            .SetUseOsDefaultLocation(false)
+            .SetSize(new System.Drawing.Size(1920, 1440))
             .Center()
+            .SetDevToolsEnabled(false)
             .SetResizable(true)
             /*
             .RegisterCustomSchemeHandler("app", (object sender, string scheme, string url, out string contentType) =>
