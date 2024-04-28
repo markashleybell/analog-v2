@@ -12,7 +12,7 @@ public static class Infrastructure
     public const string WebRootFolder = "wwwroot";
     public const string ResourcesFolder = "Resources";
 
-    public static (WebApplication Server, string BaseUrl) CreateStaticFileServer(string[] args)
+    public static (WebApplication Server, string BaseUrl) CreateLocalServer(string[] args)
     {
         var builder = WebApplication.CreateBuilder(new WebApplicationOptions
         {
@@ -72,6 +72,8 @@ public static class Infrastructure
                 ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
             }
         });
+
+        app.MapGet("/test", () => new { msg = "HELLO" });
 
         return (app, baseUrl);
     }

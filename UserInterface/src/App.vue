@@ -27,6 +27,11 @@ export default {
     created() {},
 
     methods: {
+        async test() {
+            const rsp = await (await fetch('test')).json();
+
+            alert(rsp.msg);
+        },
         runQuery() {
             alert(this.query);
         },
@@ -43,6 +48,7 @@ export default {
             v-model:value="query"
         ></MonacoEditor>
         <Button label="Submit" @click="runQuery()"></Button>
+        <Button label="TEST" @click="test()"></Button>
     </div>
 </template>
 
