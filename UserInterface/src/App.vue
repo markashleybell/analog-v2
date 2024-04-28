@@ -1,6 +1,4 @@
 <script>
-const API_URL = `https://api.github.com/repos/tryphotino/photino.NET/commits?per_page=3&sha=`;
-
 import MonacoEditor from 'monaco-editor-vue3';
 import Button from 'primevue/button';
 
@@ -31,7 +29,7 @@ export default {
     methods: {
         runQuery() {
             alert(this.query);
-        }
+        },
     },
 };
 </script>

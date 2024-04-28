@@ -1,12 +1,9 @@
-using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
-using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
-using PhotinoNET;
 
 namespace Photino.HelloPhotino.Vue;
 
@@ -24,11 +21,11 @@ public static class Infrastructure
         });
 
         var embeddedFileProvider = new ManifestEmbeddedFileProvider(
-            Assembly.GetEntryAssembly() ?? throw new Exception("Failed to load entry point assembly"), 
+            Assembly.GetEntryAssembly() ?? throw new Exception("Failed to load entry point assembly"),
             $"{ResourcesFolder}/{WebRootFolder}");
 
         builder.Environment.WebRootFileProvider = new CompositeFileProvider(
-            embeddedFileProvider, 
+            embeddedFileProvider,
             builder.Environment.WebRootFileProvider);
 
         const int startPort = 8600;
@@ -46,7 +43,7 @@ public static class Infrastructure
         for (int i = startPort; i <= endPort; i++)
         {
             port = i;
-            
+
             if (!portsInUse.Contains(port))
             {
                 break;
