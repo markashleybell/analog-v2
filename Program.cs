@@ -2,12 +2,8 @@
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.Net.Http.Headers;
 using PhotinoNET;
-using PhotinoNET.Server;
 
 namespace Photino.HelloPhotino.Vue;
 
@@ -16,47 +12,9 @@ class Program
     [STAThread]
     static void Main(string[] args)
     {
-        // PhotinoServer
-        //     .CreateStaticFileServer(args, out string baseUrl)
-        //     .RunAsync();
+        var (server, baseUrl) = Infrastructure.CreateStaticFileServer(args);
 
-        var webRootFolder = "wwwroot";
-        var startPort = 8000;
-        var portRange = 100;
-        var baseUrl = "";
-
-        WebApplicationBuilder webApplicationBuilder = WebApplication.CreateBuilder(new WebApplicationOptions
-        {
-            Args = args,
-            WebRootPath = webRootFolder
-        });
-        ManifestEmbeddedFileProvider manifestEmbeddedFileProvider = new ManifestEmbeddedFileProvider(Assembly.GetEntryAssembly(), "Resources/" + webRootFolder);
-        IFileProvider webRootFileProvider = webApplicationBuilder.Environment.WebRootFileProvider;
-        CompositeFileProvider webRootFileProvider2 = new CompositeFileProvider(manifestEmbeddedFileProvider, webRootFileProvider);
-        webApplicationBuilder.Environment.WebRootFileProvider = webRootFileProvider2;
-        int port;
-        for (port = startPort; IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners().Any((IPEndPoint x) => x.Port == port); port++)
-        {
-            if (port > port + portRange)
-            {
-                throw new SystemException($"Couldn't find open port within range {port - portRange} - {port}.");
-            }
-        }
-
-        baseUrl = $"http://localhost:{port}";
-        webApplicationBuilder.WebHost.UseUrls(baseUrl);
-        WebApplication webApplication = webApplicationBuilder.Build();
-        webApplication.UseStaticFiles(new StaticFileOptions
-        {
-            OnPrepareResponse = ctx =>
-            {
-                const int durationInSeconds = 60 * 60 * 24;
-                ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-                    "public,max-age=" + durationInSeconds;
-            }
-        });
-
-        webApplication.RunAsync();
+        server.RunAsync();
 
         var window = new PhotinoWindow()
             .SetTitle("AnaLog 2.0")
