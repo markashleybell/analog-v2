@@ -65,9 +65,11 @@ public static class Infrastructure
         {
             OnPrepareResponse = ctx =>
             {
-                const int durationInSeconds = 60 * 60 * 24; // 24 hours
-                ctx.Context.Response.Headers[HeaderNames.CacheControl] =
-                    "public,max-age=" + durationInSeconds;
+                // const int durationInSeconds = 60 * 60 * 24; // 24 hours
+                // ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                //     "public,max-age=" + durationInSeconds;
+
+                ctx.Context.Response.Headers[HeaderNames.CacheControl] = "no-cache";
             }
         });
 
