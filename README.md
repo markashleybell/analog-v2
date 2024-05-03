@@ -1,4 +1,4 @@
-# Photino.Vue Hello World Sample
+# AnaLog
 
 To build UI and run Photino in one command execute the following in a terminal.
 

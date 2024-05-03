@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
 
-namespace Photino.HelloPhotino.Vue;
+namespace analog;
 
 public static class Infrastructure
 {

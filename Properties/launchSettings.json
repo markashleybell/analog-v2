@@ -1,7 +1,7 @@
 {
-  "profiles": {
-    "HelloPhotinoVue": {
-      "commandName": "Project"
+    "profiles": {
+        "analog": {
+            "commandName": "Project"
+        }
     }
-  }
 }

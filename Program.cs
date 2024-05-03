@@ -1,13 +1,8 @@
-﻿using System.Net;
-using System.Net.NetworkInformation;
-using System.Reflection;
-using System.Text;
-using Microsoft.Extensions.FileProviders;
 using PhotinoNET;
 
-namespace Photino.HelloPhotino.Vue;
+namespace analog;
 
-class Program
+static class Program
 {
     [STAThread]
     static void Main(string[] args)
