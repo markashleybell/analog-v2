@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
@@ -33,7 +33,6 @@
         <!-- Don't publish the UI source files, but do show them in the project files list -->
         <Content Remove="$(UiRoot)**" />
         <None Remove="$(UiRoot)**" />
-        <None Include="$(UiRoot)**" Exclude="$(UiRoot)node_modules\**" />
     </ItemGroup>
 
     <ItemGroup>
