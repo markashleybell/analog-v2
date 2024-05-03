@@ -33,17 +33,26 @@ monaco.languages.setMonarchTokensProvider(
 );
 
 /*
-This is a mutable global, and isn't very Vue... 
+IMPORTANT NOTE: we create a full copy of columns.value
+when spreading it into the suggestions array within the
+provideCompletionItems function (project with .map())
 
-But unfortunately, it has to be this way, because of
-the bizarre requirement that the provideCompletionItems
-function returns completely new objects every time:
+...columns.value.map((c) [...])
+
+This seems like a waste as these items never change unless
+a new dataset is loaded... but unfortunately it has to be 
+this way, because of the bizarre requirement that the 
+provideCompletionItems function returns a completely new 
+set of objects every time:
 
 https://github.com/microsoft/monaco-editor/issues/1510
 
-So 
+If you *don't* do this, completion only works once, for no
+apparent reason (until you Google for an hour).
+
+No... I don't have a clue why, and neither do any of the 
+devs in that issue discussion, by the looks of things.
 */
-let columnCompletionSuggestions = [];
 
 monaco.languages.registerCompletionItemProvider(analogSqlMonacoLanguage, {
     triggerCharacters: [' '],
@@ -70,10 +79,10 @@ monaco.languages.registerCompletionItemProvider(analogSqlMonacoLanguage, {
                     kind: monaco.languages.CompletionItemKind.Constant,
                     insertText: 'entries',
                 },
-                ...columnCompletionSuggestions.map((c) => ({
-                    label: c,
+                ...columns.value.map((c) => ({
+                    label: c.field,
                     kind: monaco.languages.CompletionItemKind.Constant,
-                    insertText: c,
+                    insertText: c.field,
                 })),
             ],
         };
@@ -116,10 +125,6 @@ async function loadData() {
         field: c.name,
         header: c.name,
     }));
-
-    columnCompletionSuggestions = columns.value.map((c) => c.field);
-
-    console.log(columnCompletionSuggestions);
 
     dataLoading.value = false;
 }
