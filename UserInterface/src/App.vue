@@ -11,6 +11,15 @@ import { ref } from 'vue';
 // const baseUrl = '';
 const baseUrl = 'http://localhost:8600/';
 
+const query = ref('');
+const folder = ref('G:\\My Drive\\Work\\testlogs\\big');
+const files = ref([]);
+const selectedFiles = ref([]);
+const columns = ref([{ field: 'test', header: 'TEST' }]);
+const entries = ref([{ test: 'TEST' }]);
+
+const dataLoading = ref(false);
+
 const monacoOptions = {
     language: 'sql',
     roundedSelection: false,
@@ -51,15 +60,6 @@ monaco.languages.registerCompletionItemProvider('sql', {
     },
 });
 
-const query = ref('');
-const folder = ref('G:\\My Drive\\Work\\testlogs\\big');
-const files = ref([]);
-const selectedFiles = ref([]);
-const columns = ref([{ field: 'test', header: 'TEST' }]);
-const entries = ref([{ test: 'TEST' }]);
-
-const dataLoading = ref(false)
-
 async function loadFileList() {
     const rsp = await fetch(baseUrl + 'getfiles?folder=' + folder.value);
     const json = await rsp.json();
@@ -81,7 +81,10 @@ async function loadData() {
 
     const json = await rsp.json();
 
-    columns.value = json.databaseColumns.map((c) => ({ field: c.name, header: c.name }));
+    columns.value = json.databaseColumns.map((c) => ({
+        field: c.name,
+        header: c.name,
+    }));
 
     dataLoading.value = false;
 }
@@ -110,7 +113,12 @@ function runQuery() {
                 :maxSelectedLabels="10"
                 class="w-full md:w-20rem"
             />
-            <Button label="Load Data" @click="loadData()" :loading="dataLoading" class="w-48"></Button>
+            <Button
+                label="Load Data"
+                @click="loadData()"
+                :loading="dataLoading"
+                class="w-48"
+            ></Button>
         </div>
         <MonacoEditor
             :options="monacoOptions"
