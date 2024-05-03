@@ -71,7 +71,7 @@ async function test() {
 }
 
 function runQuery() {
-    alert(this.query);
+    alert(query.value);
 }
 
 function temp(editor) {
