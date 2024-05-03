@@ -13,3 +13,5 @@ indent_style = space
 indent_size = 4
 insert_final_newline = true
 charset = utf-8
+
+dotnet_diagnostic.IDE0290.severity = none

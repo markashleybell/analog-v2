@@ -18,6 +18,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.1.35" />
+        <PackageReference Include="DuckDB.NET.Data.Full" Version="0.10.2" />
         <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="8.0.4" Condition=" '$(GenerateEmbeddedFilesManifest)' == 'true' " />
         <PackageReference Include="Photino.NET" Version="2.6.0" />
     </ItemGroup>
