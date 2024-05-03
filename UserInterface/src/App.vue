@@ -5,6 +5,7 @@ import Button from 'primevue/button';
 import Column from 'primevue/column';
 import DataTable from 'primevue/datatable';
 import MultiSelect from 'primevue/multiselect';
+import InputText from 'primevue/inputtext';
 import { ref } from 'vue';
 
 // const baseUrl = '';
@@ -51,10 +52,17 @@ monaco.languages.registerCompletionItemProvider('sql', {
 });
 
 const query = ref('');
-const files = ref([{ name: 'test1.log', path: 'path' }]);
+const folder = ref('G:\\My Drive\\Work\\testlogs\\big');
+const files = ref([]);
 const selectedFiles = ref([]);
 const columns = ref([{ field: 'test', header: 'TEST' }]);
 const entries = ref([{ test: 'TEST' }]);
+
+async function loadFileList() {
+    const rsp = await (await fetch(baseUrl + 'getfiles?folder=' + folder.value)).json();
+
+    files.value = rsp.files;
+}
 
 async function test() {
     const rsp = await (await fetch(baseUrl + 'test')).json();
@@ -73,10 +81,15 @@ function temp(editor) {
 
 <template>
     <div id="content">
+        <div class="flex">
+            <InputText type="text" v-model="folder" class="w-full md:w-20rem" />
+            <Button label="Load" @click="loadFileList()"></Button>
+        </div>
+        
         <MultiSelect
             v-model="selectedFiles"
             :options="files"
-            optionLabel="name"
+            optionLabel="path"
             placeholder="Select Files"
             :maxSelectedLabels="10"
             class="w-full md:w-20rem"

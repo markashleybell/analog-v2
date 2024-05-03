@@ -86,6 +86,8 @@ public static class Infrastructure
 
         app.MapGet("/test", () => new { msg = "HELLO" });
 
+        app.MapGet("/getfiles", (string folder) => new { files = Directory.GetFiles(folder, "*.log").Select(f => new { path = f }) });
+
         return (app, baseUrl);
     }
 }
