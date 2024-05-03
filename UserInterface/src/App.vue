@@ -58,24 +58,36 @@ const selectedFiles = ref([]);
 const columns = ref([{ field: 'test', header: 'TEST' }]);
 const entries = ref([{ test: 'TEST' }]);
 
-async function loadFileList() {
-    const rsp = await (await fetch(baseUrl + 'getfiles?folder=' + folder.value)).json();
+const dataLoading = ref(false)
 
-    files.value = rsp.files;
+async function loadFileList() {
+    const rsp = await fetch(baseUrl + 'getfiles?folder=' + folder.value);
+    const json = await rsp.json();
+
+    files.value = json.files;
 }
 
-async function test() {
-    const rsp = await (await fetch(baseUrl + 'test')).json();
+async function loadData() {
+    dataLoading.value = true;
 
-    alert(rsp.msg);
+    const rsp = await fetch(baseUrl + 'loaddata', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(selectedFiles.value.map((f) => f.path)),
+    });
+
+    const json = await rsp.json();
+
+    columns.value = json.databaseColumns.map((c) => ({ field: c.name, header: c.name }));
+
+    dataLoading.value = false;
 }
 
 function runQuery() {
     alert(query.value);
-}
-
-function temp(editor) {
-    console.log(editor);
 }
 </script>
 
@@ -83,25 +95,29 @@ function temp(editor) {
     <div id="content">
         <div class="flex">
             <InputText type="text" v-model="folder" class="w-full md:w-20rem" />
-            <Button label="Load" @click="loadFileList()"></Button>
+            <Button
+                label="Load File List"
+                @click="loadFileList()"
+                class="w-48"
+            ></Button>
         </div>
-        
-        <MultiSelect
-            v-model="selectedFiles"
-            :options="files"
-            optionLabel="path"
-            placeholder="Select Files"
-            :maxSelectedLabels="10"
-            class="w-full md:w-20rem"
-        />
+        <div class="flex">
+            <MultiSelect
+                v-model="selectedFiles"
+                :options="files"
+                optionLabel="path"
+                placeholder="Select Files"
+                :maxSelectedLabels="10"
+                class="w-full md:w-20rem"
+            />
+            <Button label="Load Data" @click="loadData()" :loading="dataLoading" class="w-48"></Button>
+        </div>
         <MonacoEditor
             :options="monacoOptions"
             :height="100"
             v-model:value="query"
-            @editorDidMount="temp"
         ></MonacoEditor>
         <Button label="Submit" @click="runQuery()"></Button>
-        <Button label="TEST" @click="test()"></Button>
         <DataTable
             :value="entries"
             tableStyle="width: 100%"

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Net.Http.Headers;
+using static analog.Data;
 
 namespace analog;
 
@@ -91,6 +92,21 @@ public static class Infrastructure
         app.MapGet("/test", () => new { msg = "HELLO" });
 
         app.MapGet("/getfiles", (string folder) => new { files = Directory.GetFiles(folder, "*.log").Select(f => new { path = f }) });
+
+        app.MapPost("/loaddata", (string[] files) =>
+        {
+            var (valid, logColumns, errorMessage) = ValidateAndReturnColumns(files);
+
+            var (databaseColumns, errors) = GetDatabaseColumns(logColumns, DuckDb.DefaultIISW3CLogMappings);
+
+            var inserted = DuckDb.PopulateDatabaseFromFiles(DuckDb.InsertConnectionString, files, databaseColumns);
+
+            return new
+            {
+                inserted,
+                databaseColumns
+            };
+        });
 
         return (app, baseUrl);
     }

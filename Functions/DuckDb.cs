@@ -55,7 +55,10 @@ namespace analog
             IEnumerable<string> files,
             IEnumerable<DatabaseColumn> databaseColumns)
         {
-            File.Delete(DbFilePath);
+            if (File.Exists(DbFilePath))
+            {
+                File.Delete(DbFilePath);
+            }
 
             var resultCount = 0;
 
