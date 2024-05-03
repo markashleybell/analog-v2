@@ -109,6 +109,9 @@ public static class Infrastructure
 
         app.MapGet("/query", (string query, int pageSize, int page) =>
         {
+            // TODO: Replace newlines
+            // TODO: Handle date conversion (local time, add seconds etc)
+
             var offset = pageSize * (page - 1);
 
             if (!query.Contains("ORDER BY"))
