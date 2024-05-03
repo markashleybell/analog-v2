@@ -65,7 +65,11 @@ public static class Infrastructure
         {
             options.AddPolicy(
                 name: LocalhostCorsPolicy,
-                policy => policy.WithOrigins("http://localhost:5174"));
+                policy => policy
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                    .WithOrigins("http://localhost:5174"));
         });
 
         var app = builder.Build();
