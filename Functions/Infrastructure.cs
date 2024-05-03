@@ -1,5 +1,6 @@
 using System.Net.NetworkInformation;
 using System.Reflection;
+using DuckDB.NET.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
@@ -89,8 +90,6 @@ public static class Infrastructure
             }
         });
 
-        app.MapGet("/test", () => new { msg = "HELLO" });
-
         app.MapGet("/getfiles", (string folder) => new { files = Directory.GetFiles(folder, "*.log").Select(f => new { path = f }) });
 
         app.MapPost("/loaddata", (string[] files) =>
@@ -106,6 +105,50 @@ public static class Infrastructure
                 inserted,
                 databaseColumns
             };
+        });
+
+        app.MapGet("/query", (string query, int pageSize, int page) =>
+        {
+            var offset = pageSize * (page - 1);
+
+            if (!query.Contains("ORDER BY"))
+            {
+                query += " ORDER BY date";
+            }
+
+            IEnumerable<object[]> GetResults()
+            {
+                using var conn = new DuckDBConnection(DuckDb.ReadConnectionString);
+
+                conn.Open();
+
+                var command = conn.CreateCommand();
+
+                command.CommandText = $"FROM entries {query} LIMIT {pageSize} OFFSET {offset}";
+
+                using var reader = command.ExecuteReader();
+
+                yield return Enumerable.Range(0, reader.FieldCount).Select(i => reader.GetName(i)).ToArray();
+
+                while (reader.Read())
+                {
+                    yield return Enumerable.Range(0, reader.FieldCount)
+                        .Select(i =>
+                        {
+                            return reader.GetValue(i) switch
+                            {
+                                DateTime dt => dt.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"),
+                                int n => n.ToString(),
+                                short n => n.ToString(),
+                                string s => s,
+                                _ => ""
+                            };
+                        })
+                        .ToArray();
+                }
+            }
+
+            return GetResults();
         });
 
         return (app, baseUrl);

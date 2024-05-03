@@ -12,14 +12,19 @@ import { analogSqlLanguageDefinition } from './monaco/analog-sql/analog-sql';
 // const baseUrl = '';
 const baseUrl = 'http://localhost:8600/';
 
-const query = ref('');
+const query = ref('SELECT *');
 const folder = ref('G:\\My Drive\\Work\\testlogs\\kc');
 const files = ref([]);
 const selectedFiles = ref([]);
 const columns = ref([]);
+const currentColumns = ref([]);
 const entries = ref([]);
 
+const pageSize = ref(20)
+const page = ref(1)
+
 const dataLoading = ref(false);
+const resultsLoading = ref(false);
 
 const analogSqlMonacoLanguage = 'analog-sql';
 
@@ -59,21 +64,6 @@ monaco.languages.registerCompletionItemProvider(analogSqlMonacoLanguage, {
     provideCompletionItems: function (model, position) {
         return {
             suggestions: [
-                {
-                    label: 'SELECT',
-                    kind: monaco.languages.CompletionItemKind.Keyword,
-                    insertText: 'SELECT',
-                },
-                {
-                    label: 'FROM',
-                    kind: monaco.languages.CompletionItemKind.Keyword,
-                    insertText: 'FROM',
-                },
-                {
-                    label: 'WHERE',
-                    kind: monaco.languages.CompletionItemKind.Keyword,
-                    insertText: 'WHERE',
-                },
                 {
                     label: 'entries',
                     kind: monaco.languages.CompletionItemKind.Constant,
@@ -129,8 +119,25 @@ async function loadData() {
     dataLoading.value = false;
 }
 
-function runQuery() {
-    alert(query.value);
+async function runQuery() {
+    resultsLoading.value = true;
+
+    const rsp = await fetch(
+        baseUrl + 'query?query=' + query.value + '&pageSize=10000000&page=1'
+    );
+
+    const json = await rsp.json();
+
+    const c = json.shift();
+
+    currentColumns.value = c.map((v, i) => ({ i: 'c' + i, v }));
+
+    entries.value = json.map((row) => row.reduce((obj, item, i) => {
+        obj['c' + i] = item;
+        return obj;
+    }, {}));
+
+    resultsLoading.value = false;
 }
 </script>
 
@@ -171,14 +178,15 @@ function runQuery() {
             tableStyle="width: 100%"
             size="small"
             paginator
-            :rows="5"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
+            :rows="20"
+            :rowsPerPageOptions="[20, 50, 100]"
+            :page="page"
         >
             <Column
-                v-for="col of columns"
-                :key="col.field"
-                :field="col.field"
-                :header="col.header"
+                v-for="col of currentColumns"
+                :key="col.i"
+                :field="col.i"
+                :header="col.v"
             ></Column>
         </DataTable>
     </div>
