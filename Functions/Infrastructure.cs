@@ -9,6 +9,8 @@ namespace analog;
 
 public static class Infrastructure
 {
+    private const string LocalhostCorsPolicy = nameof(LocalhostCorsPolicy);
+
     public const string WebRootFolder = "wwwroot";
     public const string ResourcesFolder = "Resources";
 
@@ -59,7 +61,16 @@ public static class Infrastructure
 
         builder.WebHost.UseUrls(baseUrl);
 
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(
+                name: LocalhostCorsPolicy,
+                policy => policy.WithOrigins("http://localhost:5174"));
+        });
+
         var app = builder.Build();
+
+        app.UseCors(LocalhostCorsPolicy);
 
         app.UseStaticFiles(new StaticFileOptions
         {

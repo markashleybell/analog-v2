@@ -7,6 +7,9 @@ import DataTable from 'primevue/datatable';
 import MultiSelect from 'primevue/multiselect';
 import { ref } from 'vue';
 
+// const baseUrl = '';
+const baseUrl = 'http://localhost:8600/';
+
 const monacoOptions = {
     language: 'sql',
     roundedSelection: false,
@@ -54,7 +57,7 @@ const columns = ref([{ field: 'test', header: 'TEST' }]);
 const entries = ref([{ test: 'TEST' }]);
 
 async function test() {
-    const rsp = await (await fetch('test')).json();
+    const rsp = await (await fetch(baseUrl + 'test')).json();
 
     alert(rsp.msg);
 }
