@@ -1,27 +1,27 @@
 export const analogSqlLanguageConfiguration = {
     comments: {
         lineComment: '--',
-        blockComment: ['/*', '*/']
+        blockComment: ['/*', '*/'],
     },
     brackets: [
         ['{', '}'],
         ['[', ']'],
-        ['(', ')']
+        ['(', ')'],
     ],
     autoClosingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: "'", close: "'" }
+        { open: "'", close: "'" },
     ],
     surroundingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
         { open: '"', close: '"' },
-        { open: "'", close: "'" }
-    ]
+        { open: "'", close: "'" },
+    ],
 };
 
 export const analogSqlLanguageDefinition = {
@@ -31,7 +31,7 @@ export const analogSqlLanguageDefinition = {
 
     brackets: [
         { open: '[', close: ']', token: 'delimiter.square' },
-        { open: '(', close: ')', token: 'delimiter.parenthesis' }
+        { open: '(', close: ')', token: 'delimiter.parenthesis' },
     ],
 
     keywords: [
@@ -399,7 +399,7 @@ export const analogSqlLanguageDefinition = {
         'WRITE',
         'WRITETEXT',
         'YEAR',
-        'ZONE'
+        'ZONE',
     ],
     operators: [
         // Logical
@@ -435,7 +435,7 @@ export const analogSqlLanguageDefinition = {
         'PIVOT',
         'UNPIVOT',
         // Merging
-        'MATCHED'
+        'MATCHED',
     ],
     builtinFunctions: [
         // Aggregate
@@ -715,7 +715,7 @@ export const analogSqlLanguageDefinition = {
         'GETPATHLOCATOR',
         'PATHNAME',
         // ServiceBroker
-        'GET_TRANSMISSION_STATUS'
+        'GET_TRANSMISSION_STATUS',
     ],
     builtinVariables: [
         // Configuration
@@ -757,7 +757,7 @@ export const analogSqlLanguageDefinition = {
         '@@TIMETICKS',
         '@@TOTAL_ERRORS',
         '@@TOTAL_READ',
-        '@@TOTAL_WRITE'
+        '@@TOTAL_WRITE',
     ],
     pseudoColumns: ['$ACTION', '$IDENTITY', '$ROWGUID', '$PARTITION'],
     tokenizer: {
@@ -779,16 +779,16 @@ export const analogSqlLanguageDefinition = {
                         '@builtinVariables': 'predefined',
                         '@builtinFunctions': 'predefined',
                         '@keywords': 'keyword',
-                        '@default': 'identifier'
-                    }
-                }
+                        '@default': 'identifier',
+                    },
+                },
             ],
-            [/[<>=!%&+\-*/|~^]/, 'operator']
+            [/[<>=!%&+\-*/|~^]/, 'operator'],
         ],
         whitespace: [[/\s+/, 'white']],
         comments: [
             [/--+.*/, 'comment'],
-            [/\/\*/, { token: 'comment.quote', next: '@comment' }]
+            [/\/\*/, { token: 'comment.quote', next: '@comment' }],
         ],
         comment: [
             [/[^*/]+/, 'comment'],
@@ -796,7 +796,7 @@ export const analogSqlLanguageDefinition = {
             // i.e. http://stackoverflow.com/questions/728172/are-there-multiline-comment-delimiters-in-sql-that-are-vendor-agnostic
             // [/\/\*/, { token: 'comment.quote', next: '@push' }],    // nested comment not allowed :-(
             [/\*\//, { token: 'comment.quote', next: '@pop' }],
-            [/./, 'comment']
+            [/./, 'comment'],
         ],
         pseudoColumns: [
             [
@@ -804,38 +804,38 @@ export const analogSqlLanguageDefinition = {
                 {
                     cases: {
                         '@pseudoColumns': 'predefined',
-                        '@default': 'identifier'
-                    }
-                }
-            ]
+                        '@default': 'identifier',
+                    },
+                },
+            ],
         ],
         numbers: [
             [/0[xX][0-9a-fA-F]*/, 'number'],
             [/[$][+-]*\d*(\.\d*)?/, 'number'],
-            [/((\d+(\.\d*)?)|(\.\d+))([eE][\-+]?\d+)?/, 'number']
+            [/((\d+(\.\d*)?)|(\.\d+))([eE][\-+]?\d+)?/, 'number'],
         ],
         strings: [
             [/N'/, { token: 'string', next: '@string' }],
-            [/'/, { token: 'string', next: '@string' }]
+            [/'/, { token: 'string', next: '@string' }],
         ],
         string: [
             [/[^']+/, 'string'],
             [/''/, 'string'],
-            [/'/, { token: 'string', next: '@pop' }]
+            [/'/, { token: 'string', next: '@pop' }],
         ],
         complexIdentifiers: [
             [/\[/, { token: 'identifier.quote', next: '@bracketedIdentifier' }],
-            [/"/, { token: 'identifier.quote', next: '@quotedIdentifier' }]
+            [/"/, { token: 'identifier.quote', next: '@quotedIdentifier' }],
         ],
         bracketedIdentifier: [
             [/[^\]]+/, 'identifier'],
             [/]]/, 'identifier'],
-            [/]/, { token: 'identifier.quote', next: '@pop' }]
+            [/]/, { token: 'identifier.quote', next: '@pop' }],
         ],
         quotedIdentifier: [
             [/[^"]+/, 'identifier'],
             [/""/, 'identifier'],
-            [/"/, { token: 'identifier.quote', next: '@pop' }]
+            [/"/, { token: 'identifier.quote', next: '@pop' }],
         ],
         scopes: [
             [/BEGIN\s+(DISTRIBUTED\s+)?TRAN(SACTION)?\b/i, 'keyword'],
@@ -846,7 +846,7 @@ export const analogSqlLanguageDefinition = {
             [/(BEGIN|CASE)\b/i, { token: 'keyword.block' }],
             [/END\b/i, { token: 'keyword.block' }],
             [/WHEN\b/i, { token: 'keyword.choice' }],
-            [/THEN\b/i, { token: 'keyword.choice' }]
-        ]
-    }
+            [/THEN\b/i, { token: 'keyword.choice' }],
+        ],
+    },
 };
