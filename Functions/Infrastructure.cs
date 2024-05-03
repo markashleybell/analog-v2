@@ -1,4 +1,5 @@
 using System.Net.NetworkInformation;
+using System.Numerics;
 using System.Reflection;
 using DuckDB.NET.Data;
 using Microsoft.AspNetCore.Builder;
@@ -114,11 +115,6 @@ public static class Infrastructure
 
             var offset = pageSize * (page - 1);
 
-            if (!query.Contains("ORDER BY"))
-            {
-                query += " ORDER BY date";
-            }
-
             IEnumerable<object[]> GetResults()
             {
                 using var conn = new DuckDBConnection(DuckDb.ReadConnectionString);
@@ -143,8 +139,11 @@ public static class Infrastructure
                                 DateTime dt => dt.ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss"),
                                 int n => n.ToString(),
                                 short n => n.ToString(),
+                                long n => n.ToString(),
+                                decimal n => n.ToString("0.0000"),
+                                BigInteger n => n.ToString(),
                                 string s => s,
-                                _ => ""
+                                _ => reader.GetDataTypeName(i)
                             };
                         })
                         .ToArray();
